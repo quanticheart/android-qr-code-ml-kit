@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "159616537851",
+    "firebase_url": "https://qrcodeapp-ffca3.firebaseio.com",
+    "project_id": "qrcodeapp-ffca3",
+    "storage_bucket": "qrcodeapp-ffca3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159616537851:android:b85df23683dc9395fa4c5e",
+        "android_client_info": {
+          "package_name": "com.quanticheart.qrcodezxing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159616537851-h70s0ji4ka5pb916sla16j7iku1bfffg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quanticheart.qrcodezxing",
+            "certificate_hash": "0bc0ee9ef11eca964a34f491e8552e062bfabf6f"
+          }
+        },
+        {
+          "client_id": "159616537851-hi0katoncaslor5i5fkuor1gsrjh24t3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjDCTjxm2bAHVXJ1HNnkBLGB6cYPdTEyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "159616537851-hi0katoncaslor5i5fkuor1gsrjh24t3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
