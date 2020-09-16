@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.custonView.bottomSheetResult
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -24,43 +24,38 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.quanticheart.qrcodezxing.R
+import com.quanticheart.qrcodezxing.custonView.bottomSheetResult.adapter.BarcodeField
+import com.quanticheart.qrcodezxing.custonView.bottomSheetResult.adapter.BarcodeFieldAdapter
+import kotlinx.android.synthetic.main.barcode_bottom_sheet.view.*
 
 /** Displays the bottom sheet to present barcode fields contained in the detected barcode.  */
 class BarcodeResultFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(
-        layoutInflater: LayoutInflater,
-        viewGroup: ViewGroup?,
-        bundle: Bundle?
+        layoutInflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?
     ): View {
         val view = layoutInflater.inflate(R.layout.barcode_bottom_sheet, viewGroup)
 
-        val arguments = arguments
         val barcodeFieldList: ArrayList<BarcodeField> =
-                if (arguments?.containsKey(ARG_BARCODE_FIELD_LIST) == true) {
-                    arguments.getParcelableArrayList(ARG_BARCODE_FIELD_LIST) ?: ArrayList()
-                } else {
-                    Log.e(TAG, "No barcode field list passed in!")
-                    ArrayList()
-                }
+            if (arguments?.containsKey(ARG_BARCODE_FIELD_LIST) == true) {
+                arguments?.getParcelableArrayList(ARG_BARCODE_FIELD_LIST) ?: ArrayList()
+            } else {
+                Log.e(TAG, "No barcode field list passed in!")
+                ArrayList()
+            }
 
-        view.findViewById<RecyclerView>(R.id.barcode_field_recycler_view).apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            adapter = BarcodeFieldAdapter(barcodeFieldList)
-        }
-
+        BarcodeFieldAdapter(view.barcode_field_recycler_view, barcodeFieldList)
         return view
     }
 
     override fun onDismiss(dialogInterface: DialogInterface) {
         activity?.let {
             // Back to working state after the bottom sheet is dismissed.
-            ViewModelProviders.of(it).get<WorkflowModel>(WorkflowModel::class.java)
-                    .setWorkflowState(WorkflowModel.WorkflowState.DETECTING)
+            ViewModelProviders.of(it).get<BarcodeResultViewModel>(
+                BarcodeResultViewModel::class.java
+            ).setWorkflowState(BarcodeResultViewModel.WorkflowState.DETECTING)
         }
         super.onDismiss(dialogInterface)
     }

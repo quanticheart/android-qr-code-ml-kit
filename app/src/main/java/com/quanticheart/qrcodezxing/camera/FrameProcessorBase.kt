@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.camera
 
 import android.os.SystemClock
 import android.util.Log
@@ -22,10 +22,12 @@ import androidx.annotation.GuardedBy
 import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
 import java.nio.ByteBuffer
 
 /** Abstract base class of [FrameProcessor].  */
-abstract class FrameProcessorBase<T> : FrameProcessor {
+abstract class FrameProcessorBase<T> :
+    FrameProcessor {
 
     // To keep the latest frame and its metadata.
     @GuardedBy("this")

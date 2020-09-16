@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.barcodeConfirminGraphic
 
 import android.graphics.Canvas
 import android.graphics.Path
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
+import com.quanticheart.qrcodezxing.utils.PreferenceUtils
 
 /** Guides user to move camera closer to confirm the detected barcode.  */
 internal class BarcodeConfirmingGraphic(overlay: GraphicOverlay, private val barcode: FirebaseVisionBarcode) :
@@ -28,7 +30,11 @@ internal class BarcodeConfirmingGraphic(overlay: GraphicOverlay, private val bar
         super.draw(canvas)
 
         // Draws a highlighted path to indicate the current progress to meet size requirement.
-        val sizeProgress = PreferenceUtils.getProgressToMeetBarcodeSizeRequirement(overlay, barcode)
+        val sizeProgress =
+            PreferenceUtils.getProgressToMeetBarcodeSizeRequirement(
+                overlay,
+                barcode
+            )
         val path = Path()
         if (sizeProgress > 0.95f) {
             // To have a completed path with all corners rounded.

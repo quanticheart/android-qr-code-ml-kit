@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.camera
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
-/** Information about a barcode field.  */
-@Parcelize
-data class BarcodeField(val label: String, val value: String) : Parcelable
+/** Metadata info of a camera frame.  */
+class FrameMetadata(val width: Int, val height: Int, val rotation: Int)

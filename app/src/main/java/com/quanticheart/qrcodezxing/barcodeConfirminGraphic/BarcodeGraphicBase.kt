@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.barcodeConfirminGraphic
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -25,17 +25,24 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import androidx.core.content.ContextCompat
+import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
+import com.quanticheart.qrcodezxing.utils.PreferenceUtils
+import com.quanticheart.qrcodezxing.R
 
 internal abstract class BarcodeGraphicBase(overlay: GraphicOverlay) : GraphicOverlay.Graphic(overlay) {
 
     private val boxPaint: Paint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.barcode_reticle_stroke)
+        color = ContextCompat.getColor(context,
+            R.color.barcode_reticle_stroke
+        )
         style = Style.STROKE
         strokeWidth = context.resources.getDimensionPixelOffset(R.dimen.barcode_reticle_stroke_width).toFloat()
     }
 
     private val scrimPaint: Paint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.barcode_reticle_background)
+        color = ContextCompat.getColor(context,
+            R.color.barcode_reticle_background
+        )
     }
 
     private val eraserPaint: Paint = Paint().apply {
@@ -53,7 +60,8 @@ internal abstract class BarcodeGraphicBase(overlay: GraphicOverlay) : GraphicOve
         pathEffect = CornerPathEffect(boxCornerRadius)
     }
 
-    val boxRect: RectF = PreferenceUtils.getBarcodeReticleBox(overlay)
+    val boxRect: RectF =
+        PreferenceUtils.getBarcodeReticleBox(overlay)
 
     override fun draw(canvas: Canvas) {
         // Draws the dark background scrim and leaves the box area clear.

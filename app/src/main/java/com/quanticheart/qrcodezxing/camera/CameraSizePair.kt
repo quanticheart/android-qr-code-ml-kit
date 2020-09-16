@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.camera
 
 import android.hardware.Camera
 import com.google.android.gms.common.images.Size

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.camera
 
+import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
 import java.nio.ByteBuffer
 
 /** An interface to process the input camera frame and perform detection on it.  */

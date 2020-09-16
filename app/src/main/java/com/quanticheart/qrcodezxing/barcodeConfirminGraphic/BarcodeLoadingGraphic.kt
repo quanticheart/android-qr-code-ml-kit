@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.barcodeConfirminGraphic
 
 import android.animation.ValueAnimator
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PointF
+import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
 
 /** Draws the graphic to indicate the barcode result is in loading.  */
 internal class BarcodeLoadingGraphic(overlay: GraphicOverlay, private val loadingAnimator: ValueAnimator) :

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing
+package com.quanticheart.qrcodezxing.custonView.camera
 
 import android.content.Context
 import android.util.AttributeSet
@@ -23,6 +23,8 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.FrameLayout
 import com.google.android.gms.common.images.Size
+import com.quanticheart.qrcodezxing.R
+import com.quanticheart.qrcodezxing.utils.Utils
 import java.io.IOException
 
 /** Preview the camera image in the screen.  */
@@ -32,6 +34,8 @@ class CameraSourcePreview(context: Context, attrs: AttributeSet) : FrameLayout(c
         holder.addCallback(SurfaceCallback())
         addView(this)
     }
+
+    private val tag = "CameraSourcePreview"
     private var graphicOverlay: GraphicOverlay? = null
     private var startRequested = false
     private var surfaceAvailable = false
@@ -41,36 +45,6 @@ class CameraSourcePreview(context: Context, attrs: AttributeSet) : FrameLayout(c
     override fun onFinishInflate() {
         super.onFinishInflate()
         graphicOverlay = findViewById(R.id.camera_preview_graphic_overlay)
-    }
-
-    @Throws(IOException::class)
-    fun start(cameraSource: CameraSource) {
-        this.cameraSource = cameraSource
-        startRequested = true
-        startIfReady()
-    }
-
-    fun stop() {
-        cameraSource?.let {
-            it.stop()
-            cameraSource = null
-            startRequested = false
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun startIfReady() {
-        if (startRequested && surfaceAvailable) {
-            cameraSource?.start(surfaceView.holder)
-            requestLayout()
-            graphicOverlay?.let { overlay ->
-                cameraSource?.let {
-                    overlay.setCameraInfo(it)
-                }
-                overlay.clear()
-            }
-            startRequested = false
-        }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -108,7 +82,8 @@ class CameraSourcePreview(context: Context, attrs: AttributeSet) : FrameLayout(c
                     }
                     else -> {
                         childView.layout(
-                            0, -excessLenInHalf, layoutWidth, layoutHeight + excessLenInHalf)
+                            0, -excessLenInHalf, layoutWidth, layoutHeight + excessLenInHalf
+                        )
                     }
                 }
             }
@@ -117,17 +92,54 @@ class CameraSourcePreview(context: Context, attrs: AttributeSet) : FrameLayout(c
         try {
             startIfReady()
         } catch (e: IOException) {
-            Log.e(TAG, "Could not start camera source.", e)
+            Log.e(tag, "Could not start camera source.", e)
         }
     }
 
+    /**
+     * Controls
+     */
+
+    @Throws(IOException::class)
+    fun start(cameraSource: CameraSource) {
+        this.cameraSource = cameraSource
+        startRequested = true
+        startIfReady()
+    }
+
+    fun stop() {
+        cameraSource?.let {
+            it.stop()
+            cameraSource = null
+            startRequested = false
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun startIfReady() {
+        if (startRequested && surfaceAvailable) {
+            cameraSource?.start(surfaceView.holder)
+            requestLayout()
+            graphicOverlay?.let { overlay ->
+                cameraSource?.let {
+                    overlay.setCameraInfo(it)
+                }
+                overlay.clear()
+            }
+            startRequested = false
+        }
+    }
+
+    /**
+     * Callback Surface
+     */
     private inner class SurfaceCallback : SurfaceHolder.Callback {
         override fun surfaceCreated(surface: SurfaceHolder) {
             surfaceAvailable = true
             try {
                 startIfReady()
             } catch (e: IOException) {
-                Log.e(TAG, "Could not start camera source.", e)
+                Log.e(tag, "Could not start camera source.", e)
             }
         }
 
@@ -137,9 +149,5 @@ class CameraSourcePreview(context: Context, attrs: AttributeSet) : FrameLayout(c
 
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         }
-    }
-
-    companion object {
-        private const val TAG = "CameraSourcePreview"
     }
 }
