@@ -56,7 +56,8 @@ class CameraSourcePreview(context: Context, attrs: AttributeSet) : FrameLayout(c
         val previewSizeRatio = cameraPreviewSize?.let { size ->
             if (Utils.isPortraitMode(context)) {
                 // Camera's natural orientation is landscape, so need to swap width and height.
-                size.height.toFloat() / size.width
+//                size.height.toFloat() / size.width
+                layoutWidth.toFloat() / layoutHeight.toFloat()
             } else {
                 size.width.toFloat() / size.height
             }

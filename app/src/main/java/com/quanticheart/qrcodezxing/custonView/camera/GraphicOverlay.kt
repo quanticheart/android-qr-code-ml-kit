@@ -91,7 +91,7 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
     }
 
     fun translateX(x: Float): Float = x * widthScaleFactor
-    fun translateY(y: Float): Float = y * heightScaleFactor
+    private fun translateY(y: Float): Float = y * heightScaleFactor
 
     /**
      * Adjusts the `rect`'s coordinate from the preview's coordinate system to the view
