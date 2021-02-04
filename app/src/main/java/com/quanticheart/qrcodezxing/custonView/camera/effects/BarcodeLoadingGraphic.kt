@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing.barcodeConfirminGraphic
+package com.quanticheart.qrcodezxing.custonView.camera.effects
 
 import android.animation.ValueAnimator
 import android.graphics.Canvas
@@ -22,6 +22,7 @@ import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PointF
 import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
+import com.quanticheart.qrcodezxing.custonView.camera.effects.BarcodeGraphicBase
 import kotlin.math.abs
 
 /** Draws the graphic to indicate the barcode result is in loading.  */

@@ -14,35 +14,27 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing.barcodeConfirminGraphic
+package com.quanticheart.qrcodezxing.custonView.camera.effects
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.CornerPathEffect
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.Paint.Style
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.RectF
 import androidx.core.content.ContextCompat
-import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
-import com.quanticheart.qrcodezxing.utils.PreferenceUtils
 import com.quanticheart.qrcodezxing.R
+import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
 
-internal abstract class BarcodeGraphicBase(overlay: GraphicOverlay) : GraphicOverlay.Graphic(overlay) {
+internal abstract class BarcodeGraphicBase(overlay: GraphicOverlay) :
+    GraphicOverlay.Graphic(overlay) {
 
     private val boxPaint: Paint = Paint().apply {
-        color = ContextCompat.getColor(context,
-            R.color.barcode_reticle_stroke
-        )
+        color = ContextCompat.getColor(context, R.color.barcode_reticle_stroke)
         style = Style.STROKE
-        strokeWidth = context.resources.getDimensionPixelOffset(R.dimen.barcode_reticle_stroke_width).toFloat()
+        strokeWidth =
+            context.resources.getDimensionPixelOffset(R.dimen.barcode_reticle_stroke_width)
+                .toFloat()
     }
 
     private val scrimPaint: Paint = Paint().apply {
-        color = ContextCompat.getColor(context,
-            R.color.barcode_reticle_background
-        )
+        color = ContextCompat.getColor(context, R.color.barcode_reticle_background)
     }
 
     private val eraserPaint: Paint = Paint().apply {
@@ -60,8 +52,7 @@ internal abstract class BarcodeGraphicBase(overlay: GraphicOverlay) : GraphicOve
         pathEffect = CornerPathEffect(boxCornerRadius)
     }
 
-    val boxRect: RectF =
-        PreferenceUtils.getBarcodeReticleBox(overlay)
+    val boxRect: RectF = getBarcodeReticleBox(overlay)
 
     override fun draw(canvas: Canvas) {
         // Draws the dark background scrim and leaves the box area clear.
@@ -74,5 +65,15 @@ internal abstract class BarcodeGraphicBase(overlay: GraphicOverlay) : GraphicOve
         canvas.drawRoundRect(boxRect, boxCornerRadius, boxCornerRadius, eraserPaint)
         // Draws the box.
         canvas.drawRoundRect(boxRect, boxCornerRadius, boxCornerRadius, boxPaint)
+    }
+
+    private fun getBarcodeReticleBox(overlay: GraphicOverlay): RectF {
+        val overlayWidth = overlay.width.toFloat()
+        val overlayHeight = overlay.height.toFloat()
+        val boxWidth = overlayWidth * 80 / 100
+        val boxHeight = overlayHeight * 40 / 100
+        val cx = overlayWidth / 2
+        val cy = overlayHeight / 2
+        return RectF(cx - boxWidth / 2, cy - boxHeight / 2, cx + boxWidth / 2, cy + boxHeight / 2)
     }
 }

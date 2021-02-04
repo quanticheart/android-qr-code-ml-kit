@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package com.quanticheart.qrcodezxing.barcodeConfirminGraphic
+package com.quanticheart.qrcodezxing.custonView.camera.effects
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Paint.Style
 import android.graphics.RectF
 import androidx.core.content.ContextCompat
+import com.quanticheart.qrcodezxing.R
 import com.quanticheart.qrcodezxing.camera.CameraReticleAnimator
 import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
-import com.quanticheart.qrcodezxing.R
 
 /**
  * A camera reticle that locates at the center of canvas to indicate the system is active but has
  * not detected a barcode yet.
  */
-internal class BarcodeReticleGraphic(overlay: GraphicOverlay, private val animator: CameraReticleAnimator) :
-    BarcodeGraphicBase(overlay) {
+internal class RippleEffectCamera(
+    overlay: GraphicOverlay,
+    private val animator: CameraReticleAnimator
+) : BarcodeGraphicBase(overlay) {
 
     private val ripplePaint: Paint
     private val rippleSizeOffset: Int
@@ -41,11 +43,11 @@ internal class BarcodeReticleGraphic(overlay: GraphicOverlay, private val animat
         val resources = overlay.resources
         ripplePaint = Paint()
         ripplePaint.style = Style.STROKE
-        ripplePaint.color = ContextCompat.getColor(context,
-            R.color.reticle_ripple
-        )
-        rippleSizeOffset = resources.getDimensionPixelOffset(R.dimen.barcode_reticle_ripple_size_offset)
-        rippleStrokeWidth = resources.getDimensionPixelOffset(R.dimen.barcode_reticle_ripple_stroke_width)
+        ripplePaint.color = ContextCompat.getColor(context, R.color.reticle_ripple)
+        rippleSizeOffset =
+            resources.getDimensionPixelOffset(R.dimen.barcode_reticle_ripple_size_offset)
+        rippleStrokeWidth =
+            resources.getDimensionPixelOffset(R.dimen.barcode_reticle_ripple_stroke_width)
         rippleAlpha = ripplePaint.alpha
     }
 
@@ -56,11 +58,19 @@ internal class BarcodeReticleGraphic(overlay: GraphicOverlay, private val animat
         ripplePaint.strokeWidth = rippleStrokeWidth * animator.rippleStrokeWidthScale
         val offset = rippleSizeOffset * animator.rippleSizeScale
         val rippleRect = RectF(
-                boxRect.left - offset,
-                boxRect.top - offset,
-                boxRect.right + offset,
-                boxRect.bottom + offset
+            boxRect.left,
+            boxRect.top,
+            boxRect.right,
+            boxRect.bottom
         )
+
+//        for more ripple
+//        val rippleRect = RectF(
+//            boxRect.left - offset,
+//            boxRect.top - offset,
+//            boxRect.right + offset,
+//            boxRect.bottom + offset
+//        )
         canvas.drawRoundRect(rippleRect, boxCornerRadius, boxCornerRadius, ripplePaint)
     }
 }

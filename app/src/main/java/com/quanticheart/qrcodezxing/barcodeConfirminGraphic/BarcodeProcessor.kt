@@ -23,11 +23,12 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.quanticheart.qrcodezxing.custonView.bottomSheetResult.BarcodeResultViewModel
 import com.quanticheart.qrcodezxing.camera.CameraReticleAnimator
 import com.quanticheart.qrcodezxing.camera.FrameProcessorBase
+import com.quanticheart.qrcodezxing.custonView.bottomSheetResult.BarcodeResultViewModel
 import com.quanticheart.qrcodezxing.custonView.camera.GraphicOverlay
-import com.quanticheart.qrcodezxing.utils.PreferenceUtils
+import com.quanticheart.qrcodezxing.custonView.camera.effects.BarcodeLoadingGraphic
+import com.quanticheart.qrcodezxing.custonView.camera.effects.RippleEffectCamera
 import java.io.IOException
 
 /** A processor to run the barcode detector.  */
@@ -37,8 +38,7 @@ class BarcodeProcessor(
 ) : FrameProcessorBase<List<FirebaseVisionBarcode>>() {
 
     private val detector = FirebaseVision.getInstance().visionBarcodeDetector
-    private val cameraReticleAnimator: CameraReticleAnimator =
-        CameraReticleAnimator(graphicOverlay)
+    private val cameraReticleAnimator: CameraReticleAnimator = CameraReticleAnimator(graphicOverlay)
 
     override fun detectInImage(image: FirebaseVisionImage): Task<List<FirebaseVisionBarcode>> =
         detector.detectInImage(image)
@@ -66,7 +66,7 @@ class BarcodeProcessor(
         if (barcodeInCenter == null) {
             cameraReticleAnimator.start()
             graphicOverlay.add(
-                BarcodeReticleGraphic(
+                RippleEffectCamera(
                     graphicOverlay,
                     cameraReticleAnimator
                 )
@@ -74,31 +74,16 @@ class BarcodeProcessor(
             barcodeResultViewModel.setWorkflowState(BarcodeResultViewModel.WorkflowState.DETECTING)
         } else {
             cameraReticleAnimator.cancel()
-            val sizeProgress =
-                PreferenceUtils.getProgressToMeetBarcodeSizeRequirement(
+            // Barcode size in the camera view is sufficient.
+            val loadingAnimator = createLoadingAnimator(graphicOverlay, barcodeInCenter)
+            loadingAnimator.start()
+            graphicOverlay.add(
+                BarcodeLoadingGraphic(
                     graphicOverlay,
-                    barcodeInCenter
+                    loadingAnimator
                 )
-            if (sizeProgress < 1) {
-                // Barcode in the camera view is too small, so prompt user to move camera closer.
-                graphicOverlay.add(
-                    BarcodeConfirmingGraphic(graphicOverlay, barcodeInCenter)
-                )
-                barcodeResultViewModel.setWorkflowState(BarcodeResultViewModel.WorkflowState.CONFIRMING)
-            } else {
-                // Barcode size in the camera view is sufficient.
-                if (PreferenceUtils.shouldDelayLoadingBarcodeResult(graphicOverlay.context)) {
-                    val loadingAnimator = createLoadingAnimator(graphicOverlay, barcodeInCenter)
-                    loadingAnimator.start()
-                    graphicOverlay.add(
-                        BarcodeLoadingGraphic(graphicOverlay, loadingAnimator)
-                    )
-                    barcodeResultViewModel.setWorkflowState(BarcodeResultViewModel.WorkflowState.SEARCHING)
-                } else {
-                    barcodeResultViewModel.setWorkflowState(BarcodeResultViewModel.WorkflowState.DETECTED)
-                    barcodeResultViewModel.detectedBarcode.setValue(barcodeInCenter)
-                }
-            }
+            )
+            barcodeResultViewModel.setWorkflowState(BarcodeResultViewModel.WorkflowState.SEARCHING)
         }
         graphicOverlay.invalidate()
     }
